@@ -5,17 +5,18 @@ const mongoose = require('mongoose');
 const PORT= 6000;
 const taskRouter=require('./routes/taskRouter');
 mongoose.set("strictQuery", true);
+const notFound = require('./middleware/notFoundRoute');
+const errorHandler = require("./middleware/errorHandler")
 
 //middleware
 app.use(express.json());
 
 //routes
 app.use('/api/v1/tasks', taskRouter);
+app.use(errorHandler);
 
 //error routes
-app.use((req, res) =>{
-    res.status(404).json({msg: "route not found"});
-});
+app.use(notFound);
 
 //db connection
 const startServer= async() =>{
